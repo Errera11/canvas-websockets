@@ -1,0 +1,57 @@
+
+.toolbar {
+
+  height: 40px;
+  width: 100%;
+  background: floralwhite;
+  box-shadow: 0px 5px 5px;
+  position: absolute;
+
+  .buttons {
+    height: 25px;
+    width: 25px;
+    margin: 7px;
+    cursor: pointer;
+  }
+
+  .brush {
+    background: url("../assets/brush.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .circle {
+    background: url("../assets/circle.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .rect {
+    background: url("../assets/rect.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .eraser {
+    background: url("../assets/eraser.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .line {
+    background: url("../assets/line.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .redo {
+    background: url("../assets/redo.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .undo {
+    background: url("../assets/undo.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+  .save {
+    background: url("../assets/save.png") center center no-repeat;
+    background-size: 25px;
+  }
+
+}
