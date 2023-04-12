@@ -4,6 +4,7 @@ import {observer} from "mobx-react-lite";
 import {Brush} from "../tools/Brush";
 import CanvasState from "../store/canvasState";
 import ToolState from "../store/toolState";
+import canvasState from "../store/canvasState";
 
 
 const Canvas = observer(() => {
@@ -15,7 +16,7 @@ const Canvas = observer(() => {
     }, [])
     return (
         <div className='canvas'>
-            <canvas ref={canvasRef} width={800} height={400}/>
+            <canvas onMouseDown={() => canvasState.snapshot()} ref={canvasRef} width={800} height={400}/>
         </div>
     );
 });

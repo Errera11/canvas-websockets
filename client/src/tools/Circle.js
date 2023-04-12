@@ -15,7 +15,7 @@ export default class Circle extends Tool {
     onMouseDownHandler(e) {
         this.mouseDown = true;
         this.ctx.beginPath();
-        this.savegImage = this.canvas.toDataURL();
+        this.savedImage = this.canvas.toDataURL();
         this.startX = e.offsetX;
         this.startY = e.offsetY;
 
@@ -35,7 +35,7 @@ export default class Circle extends Tool {
         this.ctx.arc(this.startX, this.startY, radius, 0, 2 * Math.PI)
         this.ctx.stroke()
         const img = new Image();
-        img.src = this.savegImage;
+        img.src = this.savedImage;
         img.onload = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);

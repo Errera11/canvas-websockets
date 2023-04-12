@@ -27,8 +27,12 @@ const Toolbar = () => {
                  onClick={() => toolState.setTool(new Line(canvasState.canvas))}
             />
 
-            <div className='buttons undo'/>
-            <div className='buttons redo'/>
+            <div className='buttons undo'
+                 onClick={() => canvasState.undo()}
+            />
+            <div className='buttons redo'
+                 onClick={() => canvasState.redo()}
+            />
             <div className='buttons save'/>
         </div>
     );
