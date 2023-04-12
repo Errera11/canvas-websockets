@@ -7,6 +7,15 @@
   position: absolute;
   display: flex;
 
+  .bar {
+    display: flex;
+    margin: 10px 15px;
+    box-sizing: border-box;
+    .title {
+      margin: 0px 15px;
+    }
+  }
+
   .buttons {
     height: 25px;
     width: 25px;

@@ -14,8 +14,8 @@ export class Brush extends Tool {
     }
 
     mouseDownHandler(e) {
-        this.mouseDown = true;
         this.ctx.beginPath();
+        this.mouseDown = true;
     }
 
     mouseUpHandler(e) {

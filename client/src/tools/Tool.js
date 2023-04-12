@@ -11,4 +11,12 @@ export class Tool {
         this.ctx.mouseDown = null;
         this.ctx.mouseMove = null;
     }
+
+    changeColor(color) {
+        this.ctx.strokeStyle = color;
+    }
+
+    changeThickness(val) {
+        this.ctx.lineWidth = val;
+    }
 }

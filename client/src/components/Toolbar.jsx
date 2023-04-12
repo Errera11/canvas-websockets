@@ -4,6 +4,9 @@ import toolState from "../store/toolState";
 import canvasState from "../store/canvasState";
 import {Brush} from "../tools/Brush";
 import Rect from "../tools/Rect";
+import Circle from "../tools/Circle";
+import Eraser from "../tools/Eraser";
+import {Line} from "../tools/Line";
 
 const Toolbar = () => {
     return (
@@ -14,12 +17,18 @@ const Toolbar = () => {
             <div className='buttons rect'
                  onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
             />
-            <div className='buttons circle'/>
-            <div className='buttons eraser'/>
-            <div className='buttons line'/>
-            <input className='palette' type='color'/>
+            <div className='buttons circle'
+                 onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
+            />
+            <div className='buttons eraser'
+                 onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
+            />
+            <div className='buttons line'
+                 onClick={() => toolState.setTool(new Line(canvasState.canvas))}
+            />
+
             <div className='buttons undo'/>
-            <div className='buttons r edo'/>
+            <div className='buttons redo'/>
             <div className='buttons save'/>
         </div>
     );
