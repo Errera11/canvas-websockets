@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 
 class CanvasState {
-
+    username = '';
     undoArr = [];
     redoArr = [];
     constructor() {
@@ -12,6 +12,10 @@ class CanvasState {
     setCanvas(canvas) {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d')
+    }
+
+    setUsername(name) {
+        this.username = name;
     }
 
     snapshot() {
