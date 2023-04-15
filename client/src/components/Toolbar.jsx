@@ -12,19 +12,19 @@ const Toolbar = () => {
     return (
         <div className={'toolbar'} >
             <div className='buttons brush'
-                onClick={() => toolState.setTool(new Brush(canvasState.canvas))}
+                onClick={() => toolState.setTool(new Brush(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
             <div className='buttons rect'
-                 onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
+                 onClick={() => toolState.setTool(new Rect(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
             <div className='buttons circle'
-                 onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
+                 onClick={() => toolState.setTool(new Circle(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
             <div className='buttons eraser'
-                 onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
+                 onClick={() => toolState.setTool(new Eraser(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
             <div className='buttons line'
-                 onClick={() => toolState.setTool(new Line(canvasState.canvas))}
+                 onClick={() => toolState.setTool(new Line(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
 
             <div className='buttons undo'

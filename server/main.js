@@ -23,7 +23,7 @@ const connectionHandler = (ws, message) => {
     Wss.clients.forEach(client => {
         if(client.id == message.id) client.send(JSON.stringify({
             data: `User ${message.username} connected`,
-            type: 'connection'
+            method: 'connection'
         }));
     })
 }

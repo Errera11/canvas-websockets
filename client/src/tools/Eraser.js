@@ -1,8 +1,8 @@
 import {Tool} from "./Tool";
 
 export default class Eraser extends Tool {
-    constructor(canvas) {
-        super(canvas);
+    constructor(socket, canvas, sessionId) {
+        super(socket, canvas, sessionId);
         this.listen();
     }
 
@@ -18,19 +18,38 @@ export default class Eraser extends Tool {
     }
 
     onMouseUpHandler(e) {
-        this.ctx.strokeStyle = "black";
+        this.socket.send(JSON.stringify({
+            method: 'draw',
+            id: this.sessionId,
+            figure: {
+                type: 'Finish',
+                x: e.offsetX,
+                y: e.offsetY,
+                thickness: this.ctx.lineWidth
+            }}))
         this.mouseDown = false;
+        this.ctx.strokeStyle = 'black';
     }
 
     onMouseMoveHandler(e) {
         if(this.mouseDown) {
-            this.draw(e.offsetX, e.offsetY);
+            this.socket.send(JSON.stringify({
+                method: 'draw',
+                id: this.sessionId,
+                figure: {
+                    type: 'Eraser',
+                    x: e.offsetX,
+                    y: e.offsetY,
+                    thickness: this.ctx.lineWidth
+                }
+            }))
         }
     }
 
-    draw(x, y) {
-        this.ctx.lineTo(x, y)
-        this.ctx.strokeStyle = "white";
-        this.ctx.stroke()
+    static draw(x, y, ctx, thickness) {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = thickness;
+        ctx.lineTo(x, y);
+        ctx.stroke();
     }
 }

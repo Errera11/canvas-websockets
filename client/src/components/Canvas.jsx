@@ -6,6 +6,10 @@ import CanvasState from "../store/canvasState";
 import ToolState from "../store/toolState";
 import canvasState from "../store/canvasState";
 import {useParams} from "react-router-dom";
+import Rect from "../tools/Rect";
+import Eraser from "../tools/Eraser";
+import {Line} from "../tools/Line";
+import Circle from "../tools/Circle";
 
 
 const Canvas = observer(() => {
@@ -21,6 +25,8 @@ const Canvas = observer(() => {
         if(canvasState.username) {
             const socket = new WebSocket(process.env.REACT_APP_API_URL);
             const id = params.id;
+            canvasState.setSocket(socket);
+            canvasState.setSessionId(id);
             const message = {
                 id, method: 'connection', username: CanvasState.username
             }
@@ -36,7 +42,7 @@ const Canvas = observer(() => {
                 let message = JSON.parse(data);
                 switch (message.method) {
                     case 'connection':
-                        console.log(event.data);
+                        console.log(message.data);
                         break;
                     case 'draw':
                         draw(message);
@@ -50,7 +56,38 @@ const Canvas = observer(() => {
         const type = event.figure.type;
         switch(type) {
             case 'Brush':
-                Brush.draw(event.figure.x, event.figure.y, canvasState.ctx)
+                Brush.draw(event.figure.x, event.figure.y, canvasState.ctx,
+                    event.figure.color,
+                    event.figure.thickness)
+                break
+            case 'Finish':
+                canvasState.ctx.beginPath();
+                break
+            case 'Rect':
+                Rect.draw(event.figure.x,
+                    event.figure.y,
+                    event.figure.width,
+                    event.figure.height,
+                    canvasState.ctx,
+                    event.figure.color,
+                    event.figure.thickness,
+                    )
+                break
+            case 'Eraser':
+                Eraser.draw(event.figure.x, event.figure.y, canvasState.ctx,
+                    event.figure.thickness)
+                break
+            case 'Circle':
+                Circle.draw(event.figure.startX, event.figure.startY,
+                    event.figure.radius, canvasState.ctx,
+                    event.figure.thickness,
+                    event.figure.color)
+                break
+            case 'Line':
+                Line.draw(event.figure.startX, event.figure.startY,
+                event.figure.x, event.figure.y, canvasState.ctx,
+                    event.figure.thickness,
+                    event.figure.color)
                 break
         }
     }

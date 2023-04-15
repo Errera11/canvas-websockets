@@ -1,8 +1,8 @@
 import {Tool} from "./Tool";
 
 export class Line extends Tool {
-    constructor(canvas) {
-        super(canvas);
+    constructor(socket, canvas, sessionId) {
+        super(socket, canvas, sessionId);
         this.listen();
     }
 
@@ -23,16 +23,39 @@ export class Line extends Tool {
 
     onMouseUpHandler(e) {
         this.mouseDown = false;
+        this.socket.send(JSON.stringify({
+            method: 'draw',
+            id: this.sessionId,
+            figure: {
+                type: 'Line',
+                startX: this.startX,
+                startY: this.startY,
+                x: this.x,
+                y: this.y,
+                thickness: this.ctx.lineWidth,
+                color: this.ctx.lineStyle
+            }
+        }))
+
+        this.socket.send(JSON.stringify({
+            method: 'draw',
+            id: this.sessionId,
+            figure: {
+                type: 'Finish',
+            }
+        }))
     }
 
     onMouseMoveHandler(e) {
-        if(this.mouseDown) {
-            this.draw(e.offsetX, e.offsetY);
+        if (this.mouseDown) {
+            this.drawLine(e.offsetX, e.offsetY);
         }
     }
 
-    draw(x, y) {
+    drawLine(x, y) {
         const img = new Image();
+        this.x = x;
+        this.y = y;
         img.src = this.savedImage;
         img.onload = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -43,4 +66,14 @@ export class Line extends Tool {
             this.ctx.stroke();
         }
     }
+
+    static draw(startX, startY, x, y, ctx, thickness, color) {
+        ctx.beginPath();
+        ctx.lineWidth = thickness;
+        ctx.lineStyle = color;
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+
 }

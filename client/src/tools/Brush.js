@@ -3,7 +3,7 @@ import {Tool} from "./Tool";
 export class Brush extends Tool {
 
     constructor(socket, canvas, sessionId) {
-        super(socket,canvas,sessionId);
+        super(socket, canvas, sessionId);
         this.listen();
     }
 
@@ -20,22 +20,29 @@ export class Brush extends Tool {
 
     mouseUpHandler(e) {
         this.mouseDown = false;
+        this.socket.send(JSON.stringify({id: this.sessionId, method: 'draw', figure: {type:'Finish'}}));
     }
 
     mouseMoveHandler(e) {
-        if(this.mouseDown) {
+        if (this.mouseDown) {
             this.socket.send(JSON.stringify({
-                method: 'draw',
                 id: this.sessionId,
+                method: 'draw',
                 figure: {
                     type: 'Brush',
                     x: e.offsetX,
-                    y: e.offsetY
+                    y: e.offsetY,
+                    color: this.ctx.strokeStyle,
+                    thickness: this.ctx.lineWidth
                 }
-            }))
+        }))
         }
     }
-    static draw(x, y, ctx) {
+
+
+    static draw(x, y, ctx, color, thickness) {
+        ctx.lineWidth = thickness;
+        ctx.strokeStyle = color;
         ctx.lineTo(x, y);
         ctx.stroke();
     }

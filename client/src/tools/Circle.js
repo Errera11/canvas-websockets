@@ -1,8 +1,8 @@
 import {Tool} from "./Tool";
 
 export default class Circle extends Tool {
-    constructor(canvas) {
-        super(canvas);
+    constructor(socket, canvas, sessionId) {
+        super(socket, canvas, sessionId);
         this.listen()
     }
 
@@ -23,15 +23,35 @@ export default class Circle extends Tool {
 
     onMouseUpHandler(e) {
         this.mouseDown = false;
+        this.socket.send(JSON.stringify({
+            method: 'draw',
+            id: this.sessionId,
+            figure: {
+                type: 'Circle',
+                startX: this.startX,
+                startY: this.startY,
+                radius: this.radius,
+                thickness: this.ctx.lineWidth,
+                color: this.ctx.strokeStyle
+            }
+        }))
+        this.socket.send(JSON.stringify({
+            method: 'draw',
+            id: this.sessionId,
+            figure: {
+                type: 'Finish',
+            }
+        }))
     }
 
     onMouseMoveHandler(e) {
         if(this.mouseDown) {
-            this.draw(Math.abs(e.offsetX - this.startX));
+            this.radius = Math.abs(e.offsetX - this.startX);
+            this.drawCircle(this.radius);
         }
     }
 
-    draw(radius) {
+    drawCircle(radius) {
         this.ctx.arc(this.startX, this.startY, radius, 0, 2 * Math.PI)
         this.ctx.stroke()
         const img = new Image();
@@ -43,5 +63,13 @@ export default class Circle extends Tool {
             this.ctx.arc(this.startX, this.startY, radius, 0, 2 * Math.PI)
             this.ctx.stroke()
         }
+    }
+
+    static draw(startX, startY, radius, ctx, thickness, color) {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = thickness;
+        ctx.arc(startX,startY, radius, 0, 2 * Math.PI)
+        ctx.stroke()
     }
 }
