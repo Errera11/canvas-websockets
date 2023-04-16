@@ -7,12 +7,20 @@ import Rect from "../tools/Rect";
 import Circle from "../tools/Circle";
 import Eraser from "../tools/Eraser";
 import {Line} from "../tools/Line";
+import CanvasState from "../store/canvasState";
 
 const Toolbar = () => {
+
+    const download = () => {
+        const link = document.createElement('a');
+        link.href = CanvasState.canvas.toDataURL()
+        link.download = canvasState.sessionId + 'jpg';
+        link.click()
+    }
     return (
-        <div className={'toolbar'} >
+        <div className={'toolbar'}>
             <div className='buttons brush'
-                onClick={() => toolState.setTool(new Brush(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
+                 onClick={() => toolState.setTool(new Brush(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
             />
             <div className='buttons rect'
                  onClick={() => toolState.setTool(new Rect(canvasState.socket, canvasState.canvas, canvasState.sessionId))}
@@ -33,7 +41,7 @@ const Toolbar = () => {
             <div className='buttons redo'
                  onClick={() => canvasState.redo()}
             />
-            <div className='buttons save'/>
+            <div className='buttons save' onClick={() => download()}/>
         </div>
     );
 };
