@@ -19,9 +19,12 @@ const customStyles = {
 
     },
 
+
 };
+
 function App() {
     const [modalIsOpen, setIsOpen] = React.useState(true);
+
     function closeModal() {
         setIsOpen(false);
     }
@@ -42,11 +45,18 @@ function App() {
                 style={customStyles}
                 contentLabel="Example Modal"
             >
-                <h2 >Set your username</h2>
+
+                <h2 style={{margin: '25px', alignItems: 'center'}}>Set your username</h2>
                 <form onSubmit={e => submitHandler(e)}>
-                    <input ref={username} style={{margin: '15px'}} className={'input'} type={'text'}/>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+
+
+                    <input ref={username} style={{margin: '25px', alignItems: 'center', padding: '10px'}} className={'input'}
+                           type={'text'}/>
                     <input style={{margin: '15px'}} className={'input'} type={'submit'}/>
+                    </div>
                 </form>
+
             </Modal>
             <Toolbar/>
             <SettingsBar/>

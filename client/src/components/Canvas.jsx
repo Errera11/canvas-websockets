@@ -10,7 +10,7 @@ import Rect from "../tools/Rect";
 import Eraser from "../tools/Eraser";
 import {Line} from "../tools/Line";
 import Circle from "../tools/Circle";
-
+import axios from "axios";
 
 const Canvas = observer(() => {
 
@@ -22,22 +22,31 @@ const Canvas = observer(() => {
 
     const params = useParams();
     useEffect(() => {
-        if(canvasState.username) {
+        if (canvasState.username) {
             const socket = new WebSocket(process.env.REACT_APP_API_URL);
             const id = params.id;
             canvasState.setSocket(socket);
             canvasState.setSessionId(id);
-            const message = {
+            const msg = JSON.stringify({
                 id, method: 'connection', username: CanvasState.username
-            }
-            const msg = JSON.stringify(message);
+            });
 
             ToolState.setTool(new Brush(socket, CanvasState.canvas, id))
 
             socket.onopen = () => socket.send(msg);
+            axios.get(`http://localhost:5000/image?id=${params.id}`)
+                .then(response => {
+                    const canvasURL = 'data:image/png;base64,' + response.data;
+                    const img = new Image();
+                    img.src = canvasURL;
+                    img.onload = () => {
+                        canvasState.ctx.clearRect(0, 0, canvasState.canvas.width, canvasState.canvas.height)
+                        canvasState.ctx.drawImage(img, 0, 0, canvasState.canvas.width, canvasState.canvas.height)
+                        canvasState.ctx.stroke();
+                    }
+                });
 
-            socket.onmessage = function(event)
-            {
+            socket.onmessage = function (event) {
                 const data = event.data
                 let message = JSON.parse(data);
                 switch (message.method) {
@@ -54,7 +63,7 @@ const Canvas = observer(() => {
 
     const draw = (event) => {
         const type = event.figure.type;
-        switch(type) {
+        switch (type) {
             case 'Brush':
                 Brush.draw(event.figure.x, event.figure.y, canvasState.ctx,
                     event.figure.color,
@@ -62,6 +71,10 @@ const Canvas = observer(() => {
                 break
             case 'Finish':
                 canvasState.ctx.beginPath();
+                axios.post(`http://localhost:5000/image?id=${params.id}`, {
+                    image:
+                        canvasState.canvas.toDataURL().replace('data:image/png;base64,', '')
+                })
                 break
             case 'Rect':
                 Rect.draw(event.figure.x,
@@ -71,7 +84,7 @@ const Canvas = observer(() => {
                     canvasState.ctx,
                     event.figure.color,
                     event.figure.thickness,
-                    )
+                )
                 break
             case 'Eraser':
                 Eraser.draw(event.figure.x, event.figure.y, canvasState.ctx,
@@ -85,7 +98,7 @@ const Canvas = observer(() => {
                 break
             case 'Line':
                 Line.draw(event.figure.startX, event.figure.startY,
-                event.figure.x, event.figure.y, canvasState.ctx,
+                    event.figure.x, event.figure.y, canvasState.ctx,
                     event.figure.thickness,
                     event.figure.color)
                 break
